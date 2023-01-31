@@ -186,13 +186,12 @@ cd jrc_seeker
 git clone https://github.com/b-kolar/jrc_seeker.git
 ```
 
-## Test run
+# Test run
 
 Download test data from [here](http://compbio.mit.edu/ChromHMM/), uncompress and move to the jrc_seeker repository (Snakemake requires execution in the same directory as the ```Snakefile```!).
 
 
 In the ```/sample_data``` folder you can find some sample files. Be sure to edit the configuration file ```/sample_data/test_config.json``` with the correct paths. Later in this tutorial, you can find a detailed explantion of the contents of this sample data folder.
-
 To run the example, run the following:
 
 ```
