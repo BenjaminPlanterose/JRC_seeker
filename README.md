@@ -176,7 +176,7 @@ library(MASS)
 library(GenomicRanges)
 ```
 
-## Downloading JRC_Seeker
+#### JRC_Seeker
 
 Clone the repository with the following command:
 
