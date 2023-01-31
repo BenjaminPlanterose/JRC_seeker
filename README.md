@@ -188,13 +188,20 @@ git clone https://github.com/b-kolar/jrc_seeker.git
 
 # Test run
 
-Download test data from [here](http://compbio.mit.edu/ChromHMM/), uncompress and move to the jrc_seeker repository (Snakemake requires execution in the same directory as the ```Snakefile```!).
+Download test data from [here](http://compbio.mit.edu/ChromHMM/) and uncompress.
+
+Edit ```test_config.json``` with the correct paths.
+
+
+
 
 
 In the ```/sample_data``` folder you can find some sample files. Be sure to edit the configuration file ```/sample_data/test_config.json``` with the correct paths. Later in this tutorial, you can find a detailed explantion of the contents of this sample data folder.
-To run the example, run the following:
+
+To start the pipeline, move to the jrc_seeker git-cloned repository (Snakemake requires execution in the same directory as ```Snakefile```) and run the following code:
 
 ```
+cd <jrc_seeker_dir> # Replace jrc_seeker_dir with the right route
 conda activate jrc_seeker
 snakemake --cores 1 --configfile sample_data/test_config.json
 ```
