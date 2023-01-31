@@ -2,18 +2,15 @@
 
 <img src="https://user-images.githubusercontent.com/52743495/173834089-526c540a-df4b-452f-964e-26104bf6f261.png" width="350" />
 
-**JRC_seeker** is a tool for identifying jointly regulated CpGs (JRCs) in the human methylome. These regions can be classified into a number of genomic phenomenon, 
-such as imprinting regions or methylation quantitative trait loci (mQTLs). Developed by the Genetic Identification Lab at Erasmus Medical Center, a BAM file of 
-WGBS reads can be inputted and the result of this tool is a list of JRC locations and their associated p-values. JRC_seeker is built using a Snakemake pipeline 
-that combines Python scripts with Linux shell commands. 
+**JRC_seeker** is a Snakemake pipeline for the genome-wide discovery of jointly regulated CpGs (JRCs) in pooled whole genome bisulfite sequencing (WGBS) data. 
 
 ## Requirements
 ```
 Operating system: tested on Ubuntu 18.04.6 LTS (Bionic Beaver)
 R: tested on R version 3.6.1 (2019-07-05) -- "Action of the Toes"
 Python: Python 3.9.12
-RAM requirements: Do not attempt to run without at least 50 GB of RAM.
-Runtime: Approximately 1 day for 98 GB BAM file and 3.1 GB reference genome, using 20 cores.
+
+Tested on *Homo sapiens* (3.1 GB reference genome), with the following runtime & RAM requirements: for a 98 GB BAM file, it takes approximately 1 day (using 20 cores). Do not attempt to run without at least 50 GB of RAM.
 ```
 
 ## Dependencies
