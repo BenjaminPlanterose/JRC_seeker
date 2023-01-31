@@ -24,7 +24,7 @@ wget https://repo.anaconda.com/archive/Anaconda3-2021.11-Linux-x86_64.sh
 bash Anaconda3-2021.11-Linux-x86_64.sh
 ```
 
-### [mamba](https://github.com/mamba-org/mamba)
+#### [mamba](https://github.com/mamba-org/mamba)
 
 Install Mamba into your Conda-based python distribution
 ```
@@ -36,7 +36,7 @@ conda activate base
 ```
 
 
-### [snakemake](https://snakemake.readthedocs.io/) (at least v4.3.1)
+#### [snakemake](https://snakemake.readthedocs.io/) (at least v4.3.1)
 
 Create a new conda environment called ```jrc_seeker``` with snakemake and python 3.9 in it.
 ```
@@ -58,7 +58,7 @@ Check whether Snakemake is succesfully installed by running the following comman
 snakemake --help
 ```
 
-### [biopython-1.79](https://biopython.org/docs/1.79/api/Bio.html)
+#### [biopython-1.79](https://biopython.org/docs/1.79/api/Bio.html)
 
 Install the following packages: biopython=1.79 .
 ```
@@ -69,7 +69,7 @@ or
 pip install "biopython==1.79"
 ```
 
-### [tabix](https://github.com/samtools/htslib)
+#### [tabix](https://github.com/samtools/htslib)
 
 ```
 conda install -c bioconda tabix
@@ -79,7 +79,7 @@ or
 pip install tabix
 ```
 
-### [pandas](https://pandas.pydata.org/)
+#### [pandas](https://pandas.pydata.org/)
 
 ```
 conda install -c anaconda pandas
@@ -89,7 +89,7 @@ or
 pip install pandas
 ```
 
-### [bgzip](https://github.com/xbrianh/bgzip.git)
+#### [bgzip](https://github.com/xbrianh/bgzip.git)
 
 ```
 conda install -c bioconda bgzip
@@ -99,7 +99,7 @@ or
 pip install bgzip
 ```
 
-### [ChromHMM](http://compbio.mit.edu/ChromHMM/)
+#### [ChromHMM](http://compbio.mit.edu/ChromHMM/)
 
 Quick instructions on running ChromHMM:
 
@@ -111,7 +111,7 @@ wget http://compbio.mit.edu/ChromHMM/ChromHMM.zip
 unzip ChromHMM.zip
 ```
 
-### [bedtools](https://bedtools.readthedocs.io/en/latest/)
+#### [bedtools](https://bedtools.readthedocs.io/en/latest/)
 
 ```
 conda install -c bioconda bedtools
@@ -121,7 +121,7 @@ or
 pip install bedtools
 ```
 
-### [samtools](http://www.htslib.org/doc/samtools.html)
+#### [samtools](http://www.htslib.org/doc/samtools.html)
 
 Recommended version: 1.14
 
@@ -133,7 +133,7 @@ or
 pip install "samtools==1.14"
 ```
 
-### [samblaster](https://github.com/GregoryFaust/samblaster)
+#### [samblaster](https://github.com/GregoryFaust/samblaster)
 
 ```
 conda install -c bioconda samblaster
@@ -143,17 +143,17 @@ or
 pip install samblaster
 ```
 
-### [BISCUIT](https://huishenlab.github.io/biscuit/)
+#### [BISCUIT](https://huishenlab.github.io/biscuit/)
 
 ```
 conda install -c bioconda biscuit
 ```
 
-### [R](https://cran.r-project.org/)
+#### [R](https://cran.r-project.org/)
 
-### R dependencies
+To install R, click on the hyperlink above. To download dependency R-packages, run the following:
 
-To install R dependencies, open R by running:
+Open R by running:
 ```bash
 R
 ```
