@@ -7,7 +7,7 @@
 ## Tested on:
 ```
 Operating system: Ubuntu 18.04.6 LTS (Bionic Beaver)
-R version: 3.6.1 (2019-07-05) -- "Action of the Toes"
+R version: 3.6.1 (2019-07-05) -- "Action of the Toes" and 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
 Python version: Python 3.9.12
 Organism: Homo sapiens (3.1 GB reference genome). For a 98 GB BAM file, it takes approximately 1 day (using 20 cores). 
 
@@ -149,9 +149,7 @@ pip install samblaster
 conda install -c bioconda biscuit
 ```
 
-### R
-
-If not installed already, be sure you have R version 4.1.2 or greater.
+### [R](https://cran.r-project.org/)
 
 ### R dependencies
 
@@ -166,11 +164,16 @@ And run the following R commands:
 install.packages('data.table')
 install.packages('parallel')
 install.packages('MASS')
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.16")
+BiocManager::install('GenomicRanges')
 
 # To verify that installation was succesful
 library(data.table)
 library(parallel)
 library(MASS)
+library(GenomicRanges)
 ```
 
 ## Downloading JRC_Seeker
