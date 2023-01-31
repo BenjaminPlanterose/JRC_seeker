@@ -1,0 +1,37 @@
+{
+	"DIRECTORIES" : "",
+	"output_folder" : "/media/ben/DATA/Ben/13_JRC/test_JRC_seeker",
+	"temp_folder" : "/media/ben/DATA/Ben/13_JRC/test_JRC_seeker/tmp",
+	"path_to_jrc_seeker" : "/home/ben/Git/JRC_seeker",
+	"path_to_scripts" : "/home/ben/Git/JRC_seeker/scripts",
+	
+	"FILES" : "",
+	"path_to_config_file" : "/home/ben/Git/JRC_seeker/sample_data/test_config.json",
+	"path_to_reference_genome" : "/home/ben/Git/JRC_seeker/sample_data/reference_genome/chr20.fa",
+	"path_to_bam" : "/home/ben/Git/JRC_seeker/sample_data/sample_data.bam",
+	"chromhmm" : "/home/ben/opt/ChromHMM/ChromHMM.jar",
+	"path_to_chrom_length_file" : "/home/ben/opt/ChromHMM/CHROMSIZES/hg38.txt",
+	"chromosomes_file" : "/home/ben/Git/JRC_seeker/sample_data/chromosomes.txt",
+	"path_to_mappability_file" : "/home/ben/Git/JRC_seeker/assets/mappability_files/hg38_k100.bismap.bed",
+	"path_to_blacklist" : "/home/ben/Git/JRC_seeker/assets/blacklist_regions/hg38_blacklist_regions.bed",
+		
+
+	"PARAMETERS" : "",
+	"binpolishflank" : 600, 
+	"bin_size" : 200,
+	"region" : "chr20",
+	"lower_im_methylation_bound" : 0.2,
+	"upper_im_methylation_bound" : 0.8,
+	"sample_name" : "test_run",
+	"data_assignment_setting" : "left",
+	"k_threshold" : 3,
+	"n_states" : "4",
+	"chromhmm_it" : 500,
+	"map_threshold" : 0.95,
+	"segment_min_sz" : 200,
+	"permutation_iterations" : 1000,
+	"seed_binokulars" : 4,
+	"binokulars_output_directory" : "test_results",
+	"binokulars_cores" : 20,
+	"flank_length" : 500
+}

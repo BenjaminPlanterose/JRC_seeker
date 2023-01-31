@@ -1,0 +1,164 @@
+Config file /home/ben/Git/JRC_seeker/sample_data/test_config.json is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job                 count    min threads    max threads
+----------------  -------  -------------  -------------
+all                     1              1              1
+binarize                1              1              1
+binokulars              1              1              1
+binpolish               1              1              1
+epiread                 1              1              1
+format_meth_data        1              1              1
+label_states            1              1              1
+learnmodel              1              1              1
+meth_info               1              1              1
+pileup                  1              1              1
+process_epiread         1              1              1
+total                  11              1              1
+
+Select jobs to execute...
+
+[Mon Jan 23 17:22:26 2023]
+rule pileup:
+    input: /home/ben/Git/JRC_seeker/sample_data/sample_data.bam, /home/ben/Git/JRC_seeker/sample_data/reference_genome/chr20.fa
+    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/my_pileup.vcf.gz
+    jobid: 7
+    reason: Missing output files: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/my_pileup.vcf.gz
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:22:44 2023]
+Finished job 7.
+1 of 11 steps (9%) done
+Select jobs to execute...
+
+[Mon Jan 23 17:22:44 2023]
+rule meth_info:
+    input: /home/ben/Git/JRC_seeker/sample_data/reference_genome/chr20.fa, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/my_pileup.vcf.gz
+    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/meth_info.bed
+    jobid: 6
+    reason: Missing output files: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/meth_info.bed; Input files updated by another job: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/my_pileup.vcf.gz
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:22:57 2023]
+Finished job 6.
+2 of 11 steps (18%) done
+Select jobs to execute...
+
+[Mon Jan 23 17:22:57 2023]
+rule epiread:
+    input: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/my_pileup.vcf.gz
+    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/test_run.epiread, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/test_run_snps.bed
+    jobid: 10
+    reason: Missing output files: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/test_run.epiread; Input files updated by another job: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/my_pileup.vcf.gz
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:23:12 2023]
+Finished job 10.
+3 of 11 steps (27%) done
+Select jobs to execute...
+
+[Mon Jan 23 17:23:12 2023]
+rule process_epiread:
+    input: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/test_run.epiread
+    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binokulars_output/CHR/chr20
+    jobid: 9
+    reason: Missing output files: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binokulars_output/CHR/chr20; Input files updated by another job: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/test_run.epiread
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:23:13 2023]
+Finished job 9.
+4 of 11 steps (36%) done
+Select jobs to execute...
+
+[Mon Jan 23 17:23:13 2023]
+rule format_meth_data:
+    input: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/meth_info.bed
+    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/methylation_data.bed, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/methylated_track.bed, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/unmethylated_track.bed
+    jobid: 5
+    reason: Missing output files: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/methylation_data.bed; Input files updated by another job: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/meth_info.bed
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:23:13 2023]
+Finished job 5.
+5 of 11 steps (45%) done
+Select jobs to execute...
+
+[Mon Jan 23 17:23:13 2023]
+rule binarize:
+    input: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/methylation_data.bed
+    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/input_files/test_run_chr20_binary.txt
+    jobid: 4
+    reason: Missing output files: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/input_files/test_run_chr20_binary.txt; Input files updated by another job: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/methylation_data.bed
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:23:15 2023]
+Finished job 4.
+6 of 11 steps (55%) done
+Select jobs to execute...
+
+[Mon Jan 23 17:23:15 2023]
+rule learnmodel:
+    input: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/input_files/test_run_chr20_binary.txt
+    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/output_files/test_run_4_segments.bed, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/output_files/emissions_4.txt
+    jobid: 3
+    reason: Missing output files: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/output_files/emissions_4.txt, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/output_files/test_run_4_segments.bed; Input files updated by another job: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/input_files/test_run_chr20_binary.txt
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:23:49 2023]
+Finished job 3.
+7 of 11 steps (64%) done
+Select jobs to execute...
+
+[Mon Jan 23 17:23:49 2023]
+rule label_states:
+    input: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/output_files/emissions_4.txt
+    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binpolish/assets/state_labels.txt
+    jobid: 8
+    reason: Missing output files: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binpolish/assets/state_labels.txt; Input files updated by another job: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/output_files/emissions_4.txt
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:23:49 2023]
+Finished job 8.
+8 of 11 steps (73%) done
+Select jobs to execute...
+
+[Mon Jan 23 17:23:49 2023]
+rule binpolish:
+    input: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/output_files/test_run_4_segments.bed, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binpolish/assets/state_labels.txt
+    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binpolish/polished_segmentation.bed, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binpolish/im_regions.txt
+    jobid: 2
+    reason: Missing output files: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binpolish/im_regions.txt; Input files updated by another job: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binpolish/assets/state_labels.txt, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/chromhmm/output_files/test_run_4_segments.bed
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:23:52 2023]
+Finished job 2.
+9 of 11 steps (82%) done
+Select jobs to execute...
+
+[Mon Jan 23 17:23:52 2023]
+rule binokulars:
+    input: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binpolish/im_regions.txt, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binokulars_output/CHR/chr20
+    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binokulars_output/test_results/p_values.txt
+    jobid: 1
+    reason: Missing output files: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binokulars_output/test_results/p_values.txt; Input files updated by another job: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binokulars_output/CHR/chr20, /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binpolish/im_regions.txt
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:25:46 2023]
+Finished job 1.
+10 of 11 steps (91%) done
+Select jobs to execute...
+
+[Mon Jan 23 17:25:46 2023]
+localrule all:
+    input: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binokulars_output/test_results/p_values.txt
+    jobid: 0
+    reason: Input files updated by another job: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binokulars_output/test_results/p_values.txt
+    resources: tmpdir=/tmp
+
+[Mon Jan 23 17:25:46 2023]
+Finished job 0.
+11 of 11 steps (100%) done
+Complete log: .snakemake/log/2023-01-23T172226.119519.snakemake.log

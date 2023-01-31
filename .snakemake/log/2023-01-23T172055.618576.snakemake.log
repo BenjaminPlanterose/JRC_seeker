@@ -1,0 +1,4 @@
+Config file /home/ben/Git/JRC_seeker/sample_data/test_config.json is extended by additional config specified via the command line.
+FileNotFoundError in file /home/ben/Git/JRC_seeker/Snakefile, line 66:
+[Errno 2] No such file or directory: '/home/ultron/opt/JRC_seeker/sample_data/chromosomes.txt'
+  File "/home/ben/Git/JRC_seeker/Snakefile", line 66, in <module>
