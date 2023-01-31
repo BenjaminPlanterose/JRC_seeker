@@ -16,7 +16,7 @@ Do not attempt to run without at least 50 GB of RAM.
 
 ## Dependencies
 
-### [conda](https://www.anaconda.com/products/individual)
+#### [conda](https://www.anaconda.com/products/individual)
 
 Download and install conda if you do not have it already on your machine.
 ```
