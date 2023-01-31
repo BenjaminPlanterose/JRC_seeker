@@ -4,13 +4,12 @@
 
 **JRC_seeker** is a Snakemake pipeline for the genome-wide discovery of jointly regulated CpGs (JRCs) in pooled whole genome bisulfite sequencing (WGBS) data. 
 
-## Requirements
+## Tested on:
 ```
-Operating system: tested on Ubuntu 18.04.6 LTS (Bionic Beaver)
-Tested on: 
-- R version 3.6.1 (2019-07-05) -- "Action of the Toes"
-- Python 3.9.12
-- Homo sapiens (3.1 GB reference genome). For a 98 GB BAM file, it takes approximately 1 day (using 20 cores). 
+Operating system: Ubuntu 18.04.6 LTS (Bionic Beaver)
+R version: 3.6.1 (2019-07-05) -- "Action of the Toes"
+Python version: Python 3.9.12
+Organism: Homo sapiens (3.1 GB reference genome). For a 98 GB BAM file, it takes approximately 1 day (using 20 cores). 
 
 Do not attempt to run without at least 50 GB of RAM.
 ```
