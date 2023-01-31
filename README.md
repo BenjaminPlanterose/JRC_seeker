@@ -4,7 +4,7 @@
 
 **JRC_seeker** is a Snakemake pipeline for the genome-wide discovery of jointly regulated CpGs (JRCs) in pooled whole genome bisulfite sequencing (WGBS) data. 
 
-## Tested on:
+#### Tested on:
 ```
 Operating system: Ubuntu 18.04.6 LTS (Bionic Beaver)
 R version: 3.6.1 (2019-07-05) -- "Action of the Toes" and 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
