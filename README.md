@@ -2,7 +2,10 @@
 
 <img src="https://user-images.githubusercontent.com/52743495/173834089-526c540a-df4b-452f-964e-26104bf6f261.png" width="350" />
 
-**JRC_seeker** is a tool for identifying jointly regulated CpGs (JRCs) in the human methylome. These regions can be classified into a number of genomic phenomenon, such as imprinting regions or methylation quantitative trait loci (mQTLs). Developed by the Genetic Identification Lab at Erasmus Medical Center, a BAM file of WGBS reads can be inputted and the result of this tool is a list of JRC locations and their associated p-values. JRC_seeker is built using a Snakemake pipeline that combines Python scripts with Linux shell commands. 
+**JRC_seeker** is a tool for identifying jointly regulated CpGs (JRCs) in the human methylome. These regions can be classified into a number of genomic phenomenon, 
+such as imprinting regions or methylation quantitative trait loci (mQTLs). Developed by the Genetic Identification Lab at Erasmus Medical Center, a BAM file of 
+WGBS reads can be inputted and the result of this tool is a list of JRC locations and their associated p-values. JRC_seeker is built using a Snakemake pipeline 
+that combines Python scripts with Linux shell commands. 
 
 ## Requirements
 ```
