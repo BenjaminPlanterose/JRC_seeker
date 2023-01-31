@@ -10,7 +10,9 @@ Operating system: tested on Ubuntu 18.04.6 LTS (Bionic Beaver)
 Tested on: 
 - R version 3.6.1 (2019-07-05) -- "Action of the Toes"
 - Python 3.9.12
-- on *Homo sapiens* (3.1 GB reference genome), with the following runtime & RAM requirements: for a 98 GB BAM file, it takes approximately 1 day (using 20 cores). Do not attempt to run without at least 50 GB of RAM.
+- Homo sapiens (3.1 GB reference genome). For a 98 GB BAM file, it takes approximately 1 day (using 20 cores). 
+
+Do not attempt to run without at least 50 GB of RAM.
 ```
 
 ## Dependencies
