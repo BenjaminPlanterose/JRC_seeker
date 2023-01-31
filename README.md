@@ -190,7 +190,21 @@ git clone https://github.com/b-kolar/jrc_seeker.git
 
 Download test data from [here](http://compbio.mit.edu/ChromHMM/) and uncompress.
 
-Edit ```test_config.json``` with the correct paths.
+Edit ```test_config.json``` with the correct paths. Specifically, adjust:
+
+* "output_folder" - 
+* "temp_folder"
+* "path_to_jrc_seeker"
+* "path_to_scripts"
+* "path_to_config_file"
+* "path_to_reference_genome"
+* "path_to_bam"
+* "chromhmm"
+* "path_to_chrom_length_file"
+* "chromosomes_file"
+* "path_to_mappability_file"
+* "path_to_blacklist"
+* "PARAMETERS" - Can remain as default. Beware of the "region" parameter set to "chr12" only (to run on your data you will have to set this to &*^&^*)
 
 
 
