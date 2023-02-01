@@ -26,9 +26,9 @@ print(paste('target_file = ', target_file, '; epiread_chr_dir = ', epiread_chr_d
             '; res_dir = ', res_dir, '; Lflank = ', Lflank, '; nCores = ', nCores, sep = '')), file = 'params.txt')
 
 # Load dependencies
-library(data.table)
-library(parallel)
-library(MASS)
+suppressMessages(library(data.table))
+suppressMessages(library(parallel))
+suppressMessages(library(MASS))
 
 permute <- function(P, L)
 {

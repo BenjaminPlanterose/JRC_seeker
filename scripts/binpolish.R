@@ -1,6 +1,3 @@
-#Rscript scripts/binpolish.R -s {input.segments} -b {params.blacklist} -m {params.mappability} 
-# -l {input.labels} -y {params.segment_min_sz} -i {params.binpolishflank} -o {output.bp} -r {output.reg}
-
 # Read and separate arguments
 options = commandArgs(trailingOnly = TRUE)
 index_names = startsWith(options, '-')
@@ -15,28 +12,12 @@ epsilon = as.integer(arguments['-i'])
 output.bp = arguments['-o']
 output.reg = arguments['-r']
 
-
-############################ 1. Reading files ############################
-# segments = '/media/ultron/2tb_disk1/ben/JRC_project/0_testingJRCseeker/chromhmm/output_files/test_run_4_segments.bed'
-# blacklist = '/home/ultron/opt/JRC_seeker/assets/blacklist_regions/hg38_blacklist_regions.bed'
-# mappability = '/home/ultron/opt/JRC_seeker/assets/mappability_files/hg38_k100.bismap.bed'
-# labels = '/media/ultron/2tb_disk1/ben/JRC_project/0_testingJRCseeker/binpolish/assets/state_labels.txt'
-# segment_min_sz = 200
-# epsilon = 1000L
-# Out
-# output.bp = arguments['-o'] # polished segmentation
-# output.reg = arguments['-r'] # im_regions.txt
-
 ############################ 0. Read files ############################
 
-library(data.table)
-library(GenomicRanges)
+suppressMessages(library(data.table))
+suppressMessages(library(GenomicRanges))
 segmentations = fread(segments)
 colnames(segmentations) = c('chr', 'start', 'end', 'state')
-#segmentations$cpg_count = fread(cpg)$V5
-#seg_counts_um = fread(um_processed)
-#segmentations$M_count = seg_counts_um$V5
-#segmentations$U_count = seg_counts_um$V6
 labl_assign = fread(labels)
 labels = labl_assign$label
 names(labels) = labl_assign$state
@@ -87,15 +68,10 @@ M$label = 'M'
 U$label = 'U'
 ND$label = 'ND'
 polished_seg = sort(Reduce(c, list(M, IM, U, ND)))
-
-#setwd('/media/ultron/2tb_disk1/ben/JRC_project/0_testingJRCseeker/')
 polished_seg = as.data.frame(polished_seg)[,-(4:5)]
 polished_seg$start = as.integer(polished_seg$start)
 polished_seg$end = as.integer(polished_seg$end)
-
 fwrite(polished_seg, file = output.bp, sep = '\t', col.names = F)
-
-#setwd('/media/ultron/2tb_disk1/ben/JRC_project/0_testingJRCseeker/')
 IM_regions = paste(seqnames(IM), paste(start(IM), end(IM), sep = '-'), sep = ':')
 fwrite(data.frame(regions = IM_regions), file = output.reg, sep = '\t', col.names = F)
 

@@ -34,6 +34,7 @@ Activate the Conda base environment (which now includes Mamba).
 ```
 conda activate base
 ```
+It is also possible to install all dependencies without Mamba (instructions below). 
 
 
 #### [snakemake](https://snakemake.readthedocs.io/) (at least v4.3.1)
@@ -46,7 +47,9 @@ mamba create -c conda-forge -c bioconda -n jrc_seeker snakemake python=3.9
 **Option:**
 If conda-forge did not work for you, simply create a conda environment like this and use the pip command options below:
 ```
-conda create -n jrc_seeker python=3.9 snakemake
+conda create -n jrc_seeker python=3.9
+conda activate jrc_seeker
+pip install snakemake
 ```
 
 Activate the ```jrc_seeker``` conda environment.
@@ -101,7 +104,7 @@ pip install bgzip
 
 #### [ChromHMM](http://compbio.mit.edu/ChromHMM/)
 
-Quick instructions on running ChromHMM:
+Quick instructions on downloading ChromHMM:
 
 1. Install Java 1.5 or later if not already installed.
 2. Download and unzip the ChromHMM.zip file using the following code snippit:
@@ -151,7 +154,7 @@ conda install -c bioconda biscuit
 
 #### [R](https://cran.r-project.org/)
 
-To install R, click on the hyperlink above. To download dependency R-packages, run the following:
+To install R, click on the hyperlink above and follow instructions. To download dependency R-packages, run the following:
 
 Open R by running:
 ```bash
@@ -192,10 +195,10 @@ Download test data from [here](http://compbio.mit.edu/ChromHMM/) and uncompress.
 
 Edit ```test_config.json``` with the correct paths. Specifically, adjust:
 
-* "output_folder" - 
-* "temp_folder"
-* "path_to_jrc_seeker"
-* "path_to_scripts"
+* "output_folder" - where you want the results to be stored
+* "temp_folder" - where to store some temporary files (this directory must exist, if not the pipeline will fail)
+* "path_to_jrc_seeker" - path to git cloned jrc_seeker directory
+* "path_to_scripts" - path to script 
 * "path_to_config_file"
 * "path_to_reference_genome"
 * "path_to_bam"

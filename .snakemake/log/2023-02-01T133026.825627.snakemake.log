@@ -1,0 +1,6 @@
+Config file /home/ben/Git/JRC_seeker/sample_data/test_config.json is extended by additional config specified via the command line.
+Building DAG of jobs...
+MissingInputException in rule all in file /home/ben/Git/JRC_seeker/Snakefile, line 3:
+Missing input files for rule all:
+    affected files:
+        /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/binokulars_output/test_results/p_values.txt
