@@ -20,7 +20,7 @@ Test data available at Zenodo ($URL$)
 
 #### [conda](https://www.anaconda.com/products/individual)
 
-Download and install conda if you do not have it already on your machine.
+Download and install conda by:
 ```
 wget https://repo.anaconda.com/archive/Anaconda3-2021.11-Linux-x86_64.sh
 bash Anaconda3-2021.11-Linux-x86_64.sh
@@ -28,7 +28,6 @@ bash Anaconda3-2021.11-Linux-x86_64.sh
 
 #### [mamba](https://github.com/mamba-org/mamba)
 
-Install Mamba into your Conda-based python distribution
 ```
 conda install -n base -c conda-forge mamba
 ```
@@ -36,18 +35,17 @@ Activate the Conda base environment (which now includes Mamba).
 ```
 conda activate base
 ```
-It is also possible to install all dependencies without Mamba (instructions below). 
-
+Installation sometimes fails; nevertheless, it is possible to install all dependencies without Mamba (more instructions below).
 
 #### [snakemake](https://snakemake.readthedocs.io/) (at least v4.3.1)
 
-Create a new conda environment called ```jrc_seeker``` with snakemake and python 3.9 in it.
+Create a new conda environment called ```jrc_seeker``` with python 3.9 in it.
 ```
 mamba create -c conda-forge -c bioconda -n jrc_seeker snakemake python=3.9
 ```
 
 **Option:**
-If conda-forge did not work for you, simply create a conda environment like this and use the pip command options below:
+If Mamba failed to install, simply create a conda environment as follows and install snakemake with the pip command:
 ```
 conda create -n jrc_seeker python=3.9
 conda activate jrc_seeker
@@ -65,7 +63,6 @@ snakemake --help
 
 #### [biopython-1.79](https://biopython.org/docs/1.79/api/Bio.html)
 
-Install the following packages: biopython=1.79 .
 ```
 conda install -c conda-forge biopython=1.79
 ```
@@ -109,7 +106,7 @@ pip install bgzip
 Quick instructions on downloading ChromHMM:
 
 1. Install Java 1.5 or later if not already installed.
-2. Download and unzip the ChromHMM.zip file using the following code snippit:
+2. Download and unzip the ChromHMM.zip file using the following code:
 
 ```
 wget http://compbio.mit.edu/ChromHMM/ChromHMM.zip
@@ -193,24 +190,30 @@ git clone https://github.com/b-kolar/jrc_seeker.git
 
 # Test run
 
-Download test data from [here](http://compbio.mit.edu/ChromHMM/) and uncompress.
+Download test data from [here](http://compbio.mit.edu/ChromHMM/) and uncompress. This includes:
 
-Edit ```test_config.json``` with the correct paths. Specifically, adjust:
+* ```sample_data.bam``` - Alignment of WGBS reads from a pooled whole blood experiment. Only reads at the beginning of chr12 have been included (for the sake of timely debugging). This bam file has been sorted and indexed (.csi file).
+* ```reference_genome``` directory - includes .fa sequence for chromosome 12, already indexed by BISCUIT.
+* ```chromosomes.txt``` - specifies on which chromosomes to run JRC_seeker (in this case, only chr12).
+* ```test_config.json``` - contains the paremeters, directory locations for the JRC_seeker Snakemake pipeline.
 
-* "output_folder" - where you want the results to be stored
-* "temp_folder" - where to store some temporary files (this directory must exist, if not the pipeline will fail)
-* "path_to_jrc_seeker" - path to git cloned jrc_seeker directory
-* "path_to_scripts" - path to script 
-* "path_to_config_file"
-* "path_to_reference_genome"
-* "path_to_bam"
-* "chromhmm"
-* "path_to_chrom_length_file"
-* "chromosomes_file"
-* "path_to_mappability_file"
-* "path_to_blacklist"
-* "PARAMETERS" - Can remain as default. Beware of the "region" parameter set to "chr12" only (to run on your data you will have to set this to &*^&^*)
+To tun the example, edit ```test_config.json``` with absolute paths. Specifically, adjust:
 
+* ```output_folder``` - where you want the results to be stored. This directory must exist already before running JRC_seeker.
+* ```path_to_jrc_seeker``` - path to git cloned jrc_seeker directory.
+* ```chromhmm``` - path to the ChromHMM ChromHMM.jar script.
+* ```path_to_config_file``` - path to the test_config.json file from sample_data.
+* ```path_to_reference_genome``` - path to the chr12.fa file from sample_data.
+* ```path_to_bam``` - path to the sample_data.bam from sample_data.
+* ```chromosomes_file``` - path to the chromosomes.txt from sample_data.
+* ```path_to_chrom_length_file``` - path to chromosome lenghts for your organism and assembly of choice. See /ChromHMM/CHROMSIZES/ for examples.
+* ```path_to_mappability_file``` - We provide examples for humans (hg19, hg38) at /home/ben/Git/JRC_seeker/assets/mappability_files/
+* ```path_to_blacklist``` - - We provide examples for humans (hg19, hg38) at JRC_seeker/assets/blacklist_regions/
+* "PARAMETERS" - Make sure to adapt ```binokulars_cores``` to whatever number of threads are available in your machine.
+
+
+	
+	
 
 
 
