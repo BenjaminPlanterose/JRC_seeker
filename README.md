@@ -6,12 +6,14 @@
 
 #### Tested on:
 ```
-Operating system: Ubuntu 18.04.6 LTS (Bionic Beaver)
-R version: 3.6.1 (2019-07-05) -- "Action of the Toes" and 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
-Python version: Python 3.9.12
-Organism: Homo sapiens (3.1 GB reference genome). For a 98 GB BAM file, it takes approximately 1 day (using 20 cores). 
+- Operating system: Ubuntu 18.04.6 LTS (Bionic Beaver)
+- R version: 3.6.1 (2019-07-05) -- "Action of the Toes" and 4.2.2 Patched (2022-11-10 r83330) -- "Innocent and Trusting"
+- Python version: Python 3.9.12
+- Organism: Homo sapiens (3.1 GB reference genome). For a 98 GB BAM file, it takes approximately 1 day (using 20 cores). 
 
 Do not attempt to run without at least 50 GB of RAM.
+
+Test data available at Zenodo ($URL$)
 ```
 
 ## Dependencies
