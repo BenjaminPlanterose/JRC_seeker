@@ -232,7 +232,7 @@ The pipeline selects for intermediately-methylated regions (IMRs) and runs Binok
 3. **Genome segmentation** - A hidden Markov model (HMM) representation of the data is obtained with 4 states (no data, unmethylated, methylated, intermediately methylated) via ChromHMM.
 4. **Genome segmentation polishing** - A custom R-script is employed to remove small intermediately-methylated regions (IMRs) and regions collocating with low-mappability or blacklisted regions.
 5. **Pile-up parsing** - The whole methylation data is processed to count number of methylated/unmethylated Cs per read.
-5. **JRC statistical test (Binokulars)** - The permutation test giving rise to permutation p-values. When $\text{p-value} < 1/N_\text{iter}$, a parametric approximation is employed.
+5. **JRC statistical test (Binokulars)** - The permutation test giving rise to permutation p-values. When $p \text{value} < 1/N_\text{iter}$, a parametric approximation is employed.
 
 
 ### Generate methylation data
