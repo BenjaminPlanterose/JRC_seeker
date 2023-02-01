@@ -223,17 +223,17 @@ snakemake -s <path_to_JRC_seeker>/Snakefile --cores 1 --configfile <path_to_samp
 This pipeline should deliver the same results as stored in ```expected_output.zip``` from the ```sample_data``` and in the absence of errors.
 
 
-## Process Overview
-A number of steps are used to complete this analysis.
+## Pipeline overview Overview
 
-![image](https://user-images.githubusercontent.com/52743495/174032479-4844df52-63d8-4b46-90cc-15454b6cf113.png)
+The pipeline selects for intermediately-methylated regions (IMRs) and runs Binokulars to test for jointly-regulated CpGs (JRCs), giving rise to randomization p-values. The pipeline runs the following steps:
 
+1. **Methylation calling** - It uses BISCUIT (biscuit pileup, vcf2bed, mergecg) to call CpG methylation (both strands are combined).
+2. **Binarization of methylation data** - Custom python scripts are used to create a methylated/unmethylated binned binary signals.
+3. **Genome segmentation** - A hidden Markov model (HMM) representation of the data is obtained with 4 states (no data, unmethylated, methylated, intermediately methylated) via ChromHMM.
+4. **Genome segmentation polishing** - A custom R-script is employed to remove small intermediately-methylated regions (IMRs) and regions collocating with low-mappability or blacklisted regions.
+5. **Pile-up parsing** - The whole methylation data is processed to count number of methylated/unmethylated Cs per read.
+5. **JRC statistical test (Binokulars)** - The permutation test giving rise to permutation p-values. When $\text{p-value} < 1/N_\text{iter}$, a parametric approximation is employed.
 
-1. **Generate methylation data** - _pileup, meth_info, format_meth_data_
-2. **Binarize methylation data** - _binarize_
-3. **ChromHMM genome segmentation** - _learnmodel_
-4. **BinPolish** - _binpolish_assets, label_states, binpolish_
-5. **Binokulars** - _epiread, process_epiread, binokulars_
 
 ### Generate methylation data
 
@@ -325,14 +325,15 @@ state  methylated  unmethylated label
 3    E1    0.0006        0.0001       ND
 ```
 
-## Getting started
-Now that you have JRC_seeker and its dependencies installed, you are ready to roll! To run with using JRC_seeker, there are three main steps to follow.
+## How to run on your own data?
+
+Please make sure that you have succesfully installed all dependencies and run the example on the ```test_data```. To run JRC_seeker on your own data, follow the next steps:
 
 1. **Prepare input files** - Get your data ready for analysis and prepare input files in required formats.
 2. **Edit the configuration file** - Adjust settings in the ```config.json``` file to suit your analysis needs.
 3. **Run JRC_seeker** - Run the snakemake pipeline.
 
-### Prepare input files
+### 1. Prepare input files
 To use JRC_seeker, the following files are required:
 1. BAM file
 2. Reference Genome
