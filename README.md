@@ -202,14 +202,14 @@ To run the example, edit ```test_config.json``` with absolute paths. Specificall
 * ```output_folder``` - where you want the results to be stored. This directory must exist already before running JRC_seeker.
 * ```path_to_jrc_seeker``` - path to git cloned jrc_seeker directory.
 * ```chromhmm``` - path to the ChromHMM.jar script (as part of the ChromHMM software).
-* ```path_to_config_file``` - path to the test_config.json file from sample_data.
-* ```path_to_reference_genome``` - path to the chr12.fa file from sample_data.
-* ```path_to_bam``` - path to the sample_data.bam from sample_data.
-* ```chromosomes_file``` - path to the chromosomes.txt from sample_data.
-* ```path_to_chrom_length_file``` - path to chromosome lenghts for your organism and assembly of choice. See ```/ChromHMM/CHROMSIZES/``` for examples (as part of the ChromHMM software).
-* ```path_to_mappability_file``` - We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/mappability_files/```.
-* ```path_to_blacklist``` - - We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/blacklist_regions/```.
-* "PARAMETERS" - Make sure to adapt ```binokulars_cores``` to whatever number of threads are available in your machine.
+* ```path_to_config_file``` - path to the test_config.json file from ```sample_data```.
+* ```path_to_reference_genome``` - path to the chr12.fa file from ```sample_data```.
+* ```path_to_bam``` - path to the sample_data.bam from ```sample_data```.
+* ```chromosomes_file``` - path to the chromosomes.txt from ```sample_data```.
+* ```path_to_chrom_length_file``` - path to chromosome lengths for your organism and assembly of choice. See ```/ChromHMM/CHROMSIZES/``` for examples (as part of the ChromHMM software).
+* ```path_to_mappability_file``` - BED files for low mappability exclusion. We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/mappability_files/```.
+* ```path_to_blacklist``` - - BED files for regions with anomalous coverage. We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/blacklist_regions/```.
+* ```PARAMETERS``` - Make sure to adapt ```binokulars_cores``` to whatever number of threads are available in your machine.
 
 
 	
