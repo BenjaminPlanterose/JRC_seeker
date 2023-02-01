@@ -239,7 +239,7 @@ For more information on Binokulars (Binomial likelihood function-based bootstrap
 
 ## How to run on your own data?
 
-Please make sure that you have succesfully installed all dependencies and run the example on the ```test_data```. To run JRC_seeker on your own data, follow the next steps:
+Please make sure that you have succesfully installed all dependencies and run the example on the ```test_data```.
 
 ### 1. Prepare input files
 
@@ -273,13 +273,13 @@ awk 'NR==FNR{A[$1];next}$1 in A' /ChromHMM/CHROMSIZES/hg19.txt temp.txt > chromo
 rm temp.txt
 ```
 
-##### Mappability Files
+#### Mappability Files
 
 Regions with low mappability can result in false positive JRC regions, which is why regions with low mappability are removed during BinPolish. In the ```/assets/mappability_files``` directory, two files are included (for hg19 and hg38) that contain a list of regions of the genome that are uniquely mappable by at least one k-mer (in our case, k=100).
 
 These files are the Bismap individual k-mer files for Human hg19 and Human hg38 genomes (k100 Single-read), which were downloaded from: https://bismap.hoffmanlab.org/
 
-##### Blacklist Regions
+#### Blacklist Regions
 
 Regions that overlap with regions have been labelled as "blacklist" regions are also removed during BinPolish. For hg19, a blacklist file was created by combining regions from the following two blacklist region datasets:
 
@@ -291,7 +291,7 @@ For hg38, the hg19 file was lifted over using [UCSC LiftOver](https://genome.ucs
 
 Further details on the LiftOver settings and the blacklist regions files are listed in the ```/assets/blacklist_regions/README.md```.
 
-### Edit the configuration file
+### 2. Edit the configuration file
 
 Snakemake uses a configuration file to locate external files and parameter values. Make a copy of the sample configuration file ```/sample_data/test_config.json``` and edit the file and directory paths to point towards the respective input files and directories on your machine (use absolute paths). Furthermore, be sure to edit the parameters in the configuration file. 
 
@@ -308,7 +308,7 @@ Here are a couple of important reminders:
 
 A detailed list of the parameters in the configuration file are found at the end of this tutorial.
 
-### Run JRC_seeker
+### 3. Run JRC_seeker
 
 Go into the JRC_seeker directory by:
 ```
