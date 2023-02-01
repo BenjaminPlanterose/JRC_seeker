@@ -200,17 +200,20 @@ Download test data from [here](http://compbio.mit.edu/ChromHMM/) and uncompress.
 
 To run the example, edit ```test_config.json``` with absolute paths. Specifically, adjust:
 
-* ```output_folder``` - where you want the results to be stored. This directory must exist already before running JRC_seeker.
-* ```path_to_jrc_seeker``` - path to git cloned jrc_seeker directory.
-* ```chromhmm``` - path to the ChromHMM.jar script (as part of the ChromHMM software).
-* ```path_to_config_file``` - path to the test_config.json file from ```sample_data```.
-* ```path_to_reference_genome``` - path to the chr12.fa file from ```sample_data```.
-* ```path_to_bam``` - path to the sample_data.bam from ```sample_data```.
-* ```chromosomes_file``` - path to the chromosomes.txt from ```sample_data```.
-* ```path_to_chrom_length_file``` - path to chromosome lengths for your organism and assembly of choice. See ```/ChromHMM/CHROMSIZES/``` for examples (as part of the ChromHMM software).
-* ```path_to_mappability_file``` - BED files for low mappability exclusion. We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/mappability_files/```.
-* ```path_to_blacklist``` - - BED files for regions with anomalous coverage. We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/blacklist_regions/```.
-* ```PARAMETERS``` - Make sure to adapt ```binokulars_cores``` to whatever number of threads are available in your machine.
+* DIRECTORIES
+	* ```output_folder``` - where you want the results to be stored. This directory must exist already before running JRC_seeker.
+	* ```path_to_jrc_seeker``` - path to git cloned jrc_seeker directory.
+* PROGRAMMES
+	* ```chromhmm``` - path to the ChromHMM.jar script (as part of the ChromHMM software).
+* FILES
+	* ```path_to_config_file``` - path to the test_config.json file from ```sample_data```.
+	* ```path_to_reference_genome``` - path to the chr12.fa file from ```sample_data```.
+	* ```path_to_bam``` - path to the sample_data.bam from ```sample_data```.
+	* ```chromosomes_file``` - path to the chromosomes.txt from ```sample_data```.
+	* ```path_to_chrom_length_file``` - path to chromosome lengths for your organism and assembly of choice. See ```/ChromHMM/CHROMSIZES/``` for examples (as part of the ChromHMM software).
+	* ```path_to_mappability_file``` - BED files for low mappability exclusion. We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/mappability_files/```.
+	* ```path_to_blacklist``` - - BED files for regions with anomalous coverage. We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/blacklist_regions/```.
+* PARAMETERS - Make sure to adapt ```binokulars_cores``` to whatever number of threads are available in your machine. All other parameters must remain as default for this test.
 
 
 To run the pipeline on the example, activate the jrc_seeker conda environment and run Snakemake as follows:
@@ -223,7 +226,7 @@ snakemake -s <path_to_JRC_seeker>/Snakefile --cores 1 --configfile <path_to_samp
 This pipeline should deliver the same results as stored in ```expected_output.zip``` from the ```sample_data``` and in the absence of errors.
 
 
-## Pipeline overview Overview
+## Pipeline Overview
 
 The pipeline pre-selects for intermediately-methylated regions (IMRs) and runs a read-level randomization test (i.e. Binokulars) to identify jointly-regulated CpGs (JRCs). The pipeline runs the following steps:
 
@@ -243,15 +246,7 @@ Please make sure that you have succesfully installed all dependencies and run th
 
 ### 1. Prepare input files
 
-#### BAM 
-
-A sorted, indexed BAM with duplicate marked reads is required to run this analysis. We used BISCUIT to align our data and produced an index (.csi) for the BAM file using:
-
-```samtools sort --write-index -o my_output.bam -O BAM -```
-
 #### Reference Genome
-
-A reference genome is required to run JRC_seeker and JRC_seeker has asset files supporting the use of the hg19 and hg38 reference genomes.
 
 The reference genome you use must be indexed using the BISCUIT ```index``` command. To download and index a reference genome, you can run the following command (for hg19):
 
@@ -263,50 +258,87 @@ biscuit index hg19.fa
 
 Be aware that indexing a reference genome can take time, but only needs to be done once for each reference.
 
+
+
+#### Reference Genome & BAM files
+
+Starting from fastq files, it will be necessary to perform sequence alignment. We used BISCUIT aligner as described [here](https://huishenlab.github.io/biscuit/docs/alignment). 
+Briefly, we first make an index of the reference genome and then align as:
+```
+biscuit index hg19.fa
+biscuit align /path/to/my_reference.fa read1.fq.gz read2.fq.gz | \
+    samblaster | samtools sort --write-index -o my_output.bam -O BAM -
+```
+
+The output bam must be sorted and indexed.
+
 #### Chromosomes file
 
-The Snakemake pipeline requires a text file that contains a list of chromosomes found in the BAM file. To generate it, use the following Linux shell commands:
+JRC_seeker requires a text file containing chromosomes found in the BAM file. To generate it, you may use the following Linux shell commands:
 
 ```
 samtools idxstats your_file.bam | grep 'chr' |  cut -f 1 | tee temp.txt
-awk 'NR==FNR{A[$1];next}$1 in A' /ChromHMM/CHROMSIZES/hg19.txt temp.txt > chromosomes.txt
+awk 'NR==FNR{A[$1];next}$1 in A' /ChromHMM/CHROMSIZES/hg19.txt temp.txt > chromosomes.txt # here we filter out chromosomes not included in the chromosome size file from ChromHMM.
 rm temp.txt
 ```
 
-#### Mappability Files
+#### Mappability Files and Blacklisted Regions
 
-Regions with low mappability can result in false positive JRC regions, which is why regions with low mappability are removed during BinPolish. In the ```/assets/mappability_files``` directory, two files are included (for hg19 and hg38) that contain a list of regions of the genome that are uniquely mappable by at least one k-mer (in our case, k=100).
+In JRC_seeker, we remove potentially artifactual regions to avoid false positive JRCs.
 
-These files are the Bismap individual k-mer files for Human hg19 and Human hg38 genomes (k100 Single-read), which were downloaded from: https://bismap.hoffmanlab.org/
+A list of regions that are uniquely mappable by at least one 100-mer can be found under ```/assets/mappability_files``` as part of the JRC_seeker software (only for *Homo sapiens*). 
+These were downloaded from [here](https://bismap.hoffmanlab.org/).
 
-#### Blacklist Regions
+A list of "blacklisted" regions with anomalous coverage can be found under ```/assets/blacklist_regions```. For hg19, the blacklist file was created by combining regions from the following repositories:
 
-Regions that overlap with regions have been labelled as "blacklist" regions are also removed during BinPolish. For hg19, a blacklist file was created by combining regions from the following two blacklist region datasets:
+* DAC blacklisted regions ([DBR - ENCFF001TDO.bed](https://www.encodeproject.org/annotations/ENCSR636HFF/))
 
-1) DAC blacklisted regions ([DBR - ENCFF001TDO.bed](https://www.encodeproject.org/annotations/ENCSR636HFF/))
+* Duke Excluded Regions ([DER - ENCFF001THR.bed](https://www.encodeproject.org/annotations/ENCSR797MUY/))
 
-2) Duke Excluded Regions ([DER - ENCFF001THR.bed](https://www.encodeproject.org/annotations/ENCSR797MUY/))
-
-For hg38, the hg19 file was lifted over using [UCSC LiftOver](https://genome.ucsc.edu/cgi-bin/hgLiftOver).
+The hg38 version is simply the liftover of the hg19 file, obtained with [UCSC LiftOver](https://genome.ucsc.edu/cgi-bin/hgLiftOver).
 
 Further details on the LiftOver settings and the blacklist regions files are listed in the ```/assets/blacklist_regions/README.md```.
 
 ### 2. Edit the configuration file
 
-Snakemake uses a configuration file to locate external files and parameter values. Make a copy of the sample configuration file ```/sample_data/test_config.json``` and edit the file and directory paths to point towards the respective input files and directories on your machine (use absolute paths). Furthermore, be sure to edit the parameters in the configuration file. 
+As for the example, edit the configuration file```test_config.json``` with absolute paths. Specifically, adjust:
 
-The configuration file is organized into three sections, for readability:
-_DIRECTORIES_: Directories to add your own path to.
-_FILES_: Files to add your own path to.
-_PARAMETERS_: Parameters to change. The listed default values for parameters that are listed at the end of this tutorial are the suggested values per parameter. 
+* DIRECTORIES
+	* ```output_folder``` - where you want the results to be stored. This directory must exist already before running JRC_seeker.
+	* ```path_to_jrc_seeker``` - path to git cloned jrc_seeker directory.
+* PROGRAMMES
+	* ```chromhmm``` - path to the ChromHMM.jar script (as part of the ChromHMM software).
+* FILES
+	* ```path_to_config_file``` - path to the test_config.json file.
+	* ```path_to_reference_genome``` - path to the reference genome (.fa).
+	* ```path_to_bam``` - path to the alignment file (.bam).
+	* ```chromosomes_file``` - path to the chromosomes.txt.
+	* ```path_to_chrom_length_file``` - path to chromosome lengths. See ```/ChromHMM/CHROMSIZES/``` for examples (as part of the ChromHMM software).
+	* ```path_to_mappability_file``` - BED files for low mappability exclusion. See ```JRC_seeker/assets/mappability_files/```.
+	* ```path_to_blacklist``` - - BED files for regions with anomalous coverage. See ```JRC_seeker/assets/blacklist_regions/```.
+* PARAMETERS
+	* ```sample_name```: name of your sample (don't use spaces or the following characters: "/" "," "." "\").
+	* Binarization and binning.
+		* ```bin_size```: size of bins for binarization and ChromHMM segmentation. Measured in base pairs. (default: 200).
+		* ```lower_im_methylation_bound```: intermediately methylated methylation value for lower boundary for binarization. Recommended not to change (default: 0.2).
+		* ```upper_im_methylation_bound```: intermediately methylated methylation value for upper boundary for binarization. Recommended not to change (default: 0.8).
+		* ```data_assignment_setting``` : if (un)methylated counts are on the bin boundary, they are added to the earlier or "left" bin. Recommended not to change (default: "left", "right" is other option).
+		* ```k_threshold```: threshold for number of reads needed for bin to not be set to a no-data state (see "Binarize methylation data" section). (default: 3)
 
-Here are a couple of important reminders:
-- If running JRC_seeker on your entire BAM file, be sure to change the region value to none:
-```"region" : "none"```
-- Ensure you change the number of binokulars cores to an amount your machine can handle, such as 4:
-```"binokulars_cores" : 4```
+	* ChromHMM
+		* ```chromhmm_it```: number of ChromHMM iterations. Recommend 500 to ensure convergence, but ChromHMM default for maxiterations in the LearnModel command is 200. (default: "500").
+		* ```n_states```: number of states for ChromHMM to predict. Binarize subroutine depends on 4 states. Recommended not to change. (default: "4").
+		* 
+	* BinPolish
+		* ```binpolishflank```: .
+		* ```segment_min_sz``` : BinPolish discards regions equal or smaller to this threshold size. (default: 200)
+	* Binokulars
+		* ```permutation_iterations```: number of permutations that binokulars runs per region. (default: 1000).
+		* ```seed_binokulars```: binokulars seed value. (default: 4).
+		* ```binokulars_cores```: number of cores that the binokulars subroutine uses. (default: 4).
+		* ```flank_length```: number of base pairs that binokulars flanks regions by. Recommend not to change (default: 500).
 
-A detailed list of the parameters in the configuration file are found at the end of this tutorial.
+
 
 ### 3. Run JRC_seeker
 
@@ -394,72 +426,6 @@ The FASTA file was indexed by BISCUIT using the following command, which generat
 biscuit index chr20.fa
 ```
 
-## Config file parameters
-
-DIRECTORIES:
-```
-output_folder : folder all files will be outputted in (absolute path)
-
-path_to_scripts : path to JRC_seeker scripts folder
-
-temp_folder : some computations might be too large for default temp folders. Put the default temp folder path here to add a new path (absolute path)
-
-path_to_jrc_seeker : absolute path to JRC_seeker (e.g. /home/opt/jrc_seeker). This is the folder where the Snakefile is located.
-```
-
-FILES:
-```
-path_to_config_file : path to Snakemake config.json file (absolute path)
-
-path_to_reference_genome : path to FASTA reference genome (absolute path)
-
-path_to_bam : path to BAM file (absolute path)
-
-path_to_chrom_length_file : path to chromosome length text file used by ChromHMM. Found in the CHROMSIZES folder of ChromHMM. Use the file corresponding the the genome version your are using (e.g. hg19.txt) (absolute path)
-
-chromhmm : path to ChromHMM jar file (absolute path)
-
-path_to_mappability_file : path to mappability file. For hg19 or hg38, use the ones in the assets/mappability_files folder. Otherwise, add the absolute path to the version for your genome.
-
-chromosomes_file : path to chromosomes.txt file outlined in the "Input Files" step of this tutorial (absolute path)
-
-path_to_blacklist : path to blacklist regions file. For hg19 or hg38, use the ones in the assets/blacklist_regions folder. Otherwise, add the absolute path to the version for your genome.
-```
-
-PARAMETERS:
-```
-sample_name : name of your sample (don't use spaces or the following characters: "/" "," "." "\")
-
-bin_size : size of bins for binzarization and ChromHMM segmentation. Measured in base pairs. Recommended not to change. (default: 200)
-
-binokulars_output_directory : name of directory for binokulars output (don't use spaces or the following characters: "/" "," "." "\")
-
-region : if a specific region of the BAM file is to be investigated OR if the BAM file contains one chromosome, specify this here (e.g. "chr1" or "chr20:0-1000"). Only one region is permitted and if changing this setting, ensure that the chromosomes.txt file is manually created (see instructions above). In most circumstances, the entire BAM file is to be processed and this should thus be set to "none". (default: "none")
-
-lower_im_methylation_bound : intermediately methylated methylation value for lower boundary for binarization. Recommended not to change (default: 0.2)
-
-upper_im_methylation_bound : intermediately methylated methylation value for upper boundary for binarization. Recommended not to change (default: 0.8)
-
-data_assignment_setting : if (un)methylated counts are on the bin boundary, they are added to the earlier or "left" bin. Recommended not to change (default: "left", "right" is other option)
-
-k_threshold : threshold for number of reads needed for bin to not be set to a no-data state (see "Binarize methylation data" section). (default: 3)
-
-n_states : number of states for ChromHMM to predict. Binarize subroutine depends on 4 states. Recommended not to change. (default: "4")
-
-chromhmm_it : number of ChromHMM iterations. Recommend 500 to ensure convergence, but ChromHMM default for maxiterations in the LearnModel command is 200. (default: "500")
-
-map_threshold : threshold overlap coverage (as a percent) of intermediately methylated regions overlapping with low mappability regions for them to be discarded. Recommend not to change (default: 0.95)
-
-segment_min_sz : BinPolish discards regions equal or smaller to this threshold size. (default: 200)
-
-permutation_iterations : number of permutations that binokulars runs per region. (default: 1000)
-
-seed_binokulars : binokulars seed value. (default: 4)
-
-binokulars_cores : number of cores that the binokulars subroutine uses. (default: 4)
-
-flank_length : number of base pairs that binokulars flanks regions by. Recommend not to change (default: 500)
-```
 
 ## Sources
 
