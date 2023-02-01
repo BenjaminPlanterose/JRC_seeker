@@ -225,14 +225,14 @@ This pipeline should deliver the same results as stored in ```expected_output.zi
 
 ## Pipeline overview Overview
 
-The pipeline selects for intermediately-methylated regions (IMRs) and runs Binokulars to test for jointly-regulated CpGs (JRCs), giving rise to randomization p-values. The pipeline runs the following steps:
+The pipeline pre-selects for intermediately-methylated regions (IMRs) and runs a read-level randomization test to identify jointly-regulated CpGs (JRCs). The pipeline runs the following steps:
 
 1. **Methylation calling** - It uses BISCUIT (biscuit pileup, vcf2bed, mergecg) to call CpG methylation (both strands are combined).
 2. **Binarization of methylation data** - Custom python scripts are used to create a methylated/unmethylated binned binary signals.
 3. **Genome segmentation** - A hidden Markov model (HMM) representation of the data is obtained with 4 states (no data, unmethylated, methylated, intermediately methylated) via ChromHMM.
 4. **Genome segmentation polishing** - A custom R-script is employed to remove small intermediately-methylated regions (IMRs) and regions collocating with low-mappability or blacklisted regions.
-5. **Pile-up parsing** - The whole methylation data is processed to count number of methylated/unmethylated Cs per read.
-5. **JRC statistical test (Binokulars)** - The permutation test giving rise to permutation p-values. When $p\;\text{value} < 1/N_\text{iter}$, a parametric approximation is employed.
+5. **Pile-up parsing** - The whole methylation data is processed to count number of methylated/unmethylated Cs per read. This is done via bash commands.
+5. **JRC statistical test (Binokulars)** - The permutation test implemented in R gives rise to permutation p-values. When $\text{p-value} < 1/N_\text{iter}$, a parametric approximation is employed.
 
 
 ### Generate methylation data
