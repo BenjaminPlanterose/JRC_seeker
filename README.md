@@ -225,126 +225,26 @@ This pipeline should deliver the same results as stored in ```expected_output.zi
 
 ## Pipeline overview Overview
 
-The pipeline pre-selects for intermediately-methylated regions (IMRs) and runs a read-level randomization test to identify jointly-regulated CpGs (JRCs). The pipeline runs the following steps:
+The pipeline pre-selects for intermediately-methylated regions (IMRs) and runs a read-level randomization test (i.e. Binokulars) to identify jointly-regulated CpGs (JRCs). The pipeline runs the following steps:
 
 1. **Methylation calling** - It uses BISCUIT (biscuit pileup, vcf2bed, mergecg) to call CpG methylation (both strands are combined).
 2. **Binarization of methylation data** - Custom python scripts are used to create a methylated/unmethylated binned binary signals.
 3. **Genome segmentation** - A hidden Markov model (HMM) representation of the data is obtained with 4 states (no data, unmethylated, methylated, intermediately methylated) via ChromHMM.
 4. **Genome segmentation polishing** - A custom R-script is employed to remove small intermediately-methylated regions (IMRs) and regions collocating with low-mappability or blacklisted regions.
-5. **Pile-up parsing** - The whole methylation data is processed to count number of methylated/unmethylated Cs per read. This is done via bash commands.
+5. **Pile-up parsing** - The whole methylation data is processed to count number of methylated/unmethylated Cs per read. This is done with BISCUIT and bash commands.
 5. **JRC statistical test (Binokulars)** - The permutation test implemented in R gives rise to permutation p-values. When $\text{p-value} < 1/N_\text{iter}$, a parametric approximation is employed.
 
+For more information on Binokulars (Binomial likelihood function-based bootstrap hypothesis test for co-methylation within reads), visit [here](https://github.com/BenjaminPlanterose/Binokulars).
 
-### Generate methylation data
-
-BISCUIT is used to create a pileup VCF of DNA methylation and genetic information. After generating the VCF file, with both genetic and methylation information, beta values and coverage are extracted using the ```vcf2bed```  command to study the methylation levels at sequenced CpGs. The output of this step is a BED file of the format below, where the columns represent chromosome, CpG start base, CpG end base, beta methylation value (proportion of reads methylated), and total read coverage.
-
-``` 
-chr1    10469   10470   0.625   8
-chr1    10471   10472   0.444   9
-chr1    10484   10485   0.889   9
-chr1    10489   10490   1.000   10
-chr1    10493   10494   0.875   8
-``` 
-### Binarize methylation data
-
-From the above BED file, the counts of methylated and unmethylated reads at every CpG location are calculated using the ```format_methylation.py``` script. Using the ```format_methylation.py``` script CpGs counts are combined using 200-bp bins and a binarized track is formed per chromosome for all chromosomes that contain methylation data:
-
-``` 
-methylated  unmethylated
-0           1
-0           0
-1           1
-1           0
-1           1
-``` 
-
-The first column represents if the bin contains methylated reads ```(0 = False, 1 = True)``` and the second column represents if the bin contains unmethylated reads ```(0 = False, 1 = True)```. Thus: ```0   1``` is an unmethylated bin, ```1   0``` is a methylated bin, and ```1   1``` is an intermediately methylated bin. This bins are binarized from count data using their methylation value. A methylation value less than 0.2 is unmethylated and above 0.8 is methylated. Between these values is intermediately methylated. These binarization thresholds can be changed in the ```config.json``` file using the ```lower_im_methylation_bound``` and the ```upper_im_methylation_bound``` variables. The bin size can also be adjusted in the ```config.json``` file using the ```bin_size``` variable. ChromHMM, the genome segmentation software used in the following step recommends a bin size of 200. Changing this bin size here will also change it for the ChromHMM step. 
-
-A threshold is also set to set bins with low coverage to a no-data state, aka ```0   0```. If there are less that 3 methylated/unmethylated counts (not CpGs), then this bin is set to the low-coverage state. This threshold can be set by changing the ```k_threshold``` variable in the ```config.json``` file.
-
-### ChromHMM genome segmentation
-
-ChromHMM, a genome segmentation and annotation software tool, is leveraged to identify intermediately methylated regions within the provided dataset. Ultimately, this step summarizes the binarized bins into larger regions throughout the genome. 
-
-Finding intermediately methylated regions is necessary for finding JRCs. ChromHMM uses a multivariate hidden Markov Model to infer states from binarized data, allowing these regions to be identified and for the rest of the dataset/genome to be removed (as this is not of interest for the purpose of finding CpGs). ChromHMM segments all chromosomes provided into state regions and annotates them with a number. Each of these numbers corresponds to one of the four states of interest to us (no-data, unmethylated, methylated, intermediately methylated).
-
- ![image](https://user-images.githubusercontent.com/52743495/174035708-41f2e402-666b-48dd-845a-892f3d7194d9.png)
-
-The output of ChromHMM is a list of segments that correspond to a given state. Using the emission matrix outputted by ChromHMM, the states can be annotated and the regions corresponding to intermediately methylated regions can be identified. 
-
-### BinPolish
-
-After the ChromHMM segmentation, there are often a large number of intermediately methylated regions, some of which are very small (200 bp). The goal of BinPolish is to remove some of these sparse, small regions or to summarize them into larger intermediately methylated blocks, thus reducing the large number of small intermediately methylated regions into a set of larger, robust ones. Essentially, we are polishing intermediately methylated segments.
-
-![BinPolish](https://user-images.githubusercontent.com/52743495/174038503-de253ac7-e8c3-4e08-86a5-7d6f0d60af16.png)
-
-Intermediately methylated regions are ignored that overlap with known regions that have low mappability (source) or are documented blacklisted regions (source). The number of CpGs per region is also calculated using the original data from BISCUIT. Following this, a the main steps employed that merge or remove intermediately methylated (IM) regions are:
-
-1. Merge IM regions that are separated by 200bp
-2. If small IM regions are within two larger regions, classify as the state of the earlier large region
-3. If two IM regions are separated by a region that has less than one CpG, merge these IM regions
-4. If IM region is classified wrongly, re-classify
-5. Merge IM regions that are separated by 200bp (again)
-6. If a state <=600bp is within two IM states that have higher cpg density, merge
-7. States with CpG density <= 2 are turned to no-data states
-8. If small IM regions are within two larger regions, classify as the state of the earlier large region (again)
-9. Remove small regions (<= 200 bp)
-
-### Binokulars
-
-Using the set of intermediately methylated regions from BinPolish, binokulars assigns a p-value to each region, allowing users to identify significant JRCs. Binokulars uses the list of JRCs and a Single Fragment Epiread format file (produced by BISCUIT) to complete its analysis. 
-
-Binokulars, named after its method (Binomial likelihood function-based bootstrap hypothesis test for co-methylation within reads), can be found [here](https://github.com/BenjaminPlanterose/Binokulars).
-
-## Quality Control
-
-When running JRC_seeker, you will notice that the labels of ChromHMM states are inferred in the snakemake step ```label_states```. In this step, the emissions file from ChromHMM is used to assign each state as representing intermediately methylated (IM), methylated(M), unmethylated (U), or no data (ND) regions. If there is not enough data, these states cannot be inferred correctly.
-
-See below the result of a run with low coverage:
-
-```
-state  methylated  unmethylated label
-0    E3    0.999999      0.970137    IM
-1    E2    0.609009      0.006016     M
-2    E4    0.126744      0.106534     U
-3    E1    0.000658      0.000123    ND
-```
-
-You can notice that the state ```E4``` is labelled as unmethylated, but does not seem to represent this state (the emissions matrix shows that it is almost tied between methylated and unmethylated).
-
-While it is most important that the IM states are inferred correctly, as these are retained, incorrect state labels can affect the accuracy of later steps like BinPolish. Be cautious and double check this matrix during the pipeline run. An error message will also be outputted if the states are not classified correctly.
-
-As an example, a correctly labelled state matrix would be as follows:
-
-```
-state  methylated  unmethylated label
-0    E3    0.91          0.97        IM
-1    E2    0.63          0.01         M
-2    E4    0.10          0.70         U
-3    E1    0.0006        0.0001       ND
-```
 
 ## How to run on your own data?
 
 Please make sure that you have succesfully installed all dependencies and run the example on the ```test_data```. To run JRC_seeker on your own data, follow the next steps:
 
-1. **Prepare input files** - Get your data ready for analysis and prepare input files in required formats.
-2. **Edit the configuration file** - Adjust settings in the ```config.json``` file to suit your analysis needs.
-3. **Run JRC_seeker** - Run the snakemake pipeline.
-
 ### 1. Prepare input files
-To use JRC_seeker, the following files are required:
-1. BAM file
-2. Reference Genome
-3. Chromosomes file
-
-If you are using a reference genome other than Hg19 or Hg38, these files will also be needed. Otherwise, they are provided in the ```/assets``` directory:
-
-5. Mappability file
-6. Blacklist region file
 
 #### BAM 
+
 A sorted, indexed BAM with duplicate marked reads is required to run this analysis. We used BISCUIT to align our data and produced an index (.csi) for the BAM file using:
 
 ```samtools sort --write-index -o my_output.bam -O BAM -```
@@ -365,37 +265,13 @@ Be aware that indexing a reference genome can take time, but only needs to be do
 
 #### Chromosomes file
 
-The Snakemake pipeline requires a text file that contains a list of chromosomes found in the BAM file. Depending on how you intend to use JRC_seeker, you can create this file two different ways:
-
-###### #1 - Process entire BAM
-
-Generally, you will run your entire BAM through JRC_seeker. In this case, do the following:
-
-To generate the chromosomes file, ChromHMM must also be installed and you must have the location to the CHROMSIZES file corresponding to your genome version (e.g. hg19.txt). This file can be created using the following Linux shell commands:
+The Snakemake pipeline requires a text file that contains a list of chromosomes found in the BAM file. To generate it, use the following Linux shell commands:
 
 ```
 samtools idxstats your_file.bam | grep 'chr' |  cut -f 1 | tee temp.txt
 awk 'NR==FNR{A[$1];next}$1 in A' /ChromHMM/CHROMSIZES/hg19.txt temp.txt > chromosomes.txt
 rm temp.txt
 ```
-
-For this run, remember to set your the ```region``` parameter in your config file to ```none```.
-
-###### #2 - Process specific region
-
-If you want to process a single region, you should manually create a chromosomes.txt file. In this case, just save the chromosome number in a text file titles ```chromosomes.txt```.
-
-For example, if your region of interest is ```chr1:3000-50000```, your chromosomes.txt file should be:
-
-```
-chr1
-```
-
-For this run, remember to set your the ```region``` parameter in your config file to the region you are investigating. In the above example, you would set the ```region``` parameter in your config file to ```chr1:3000-50000```.
-
-Please be aware that even if you have a reference genome for a single chromosome and you have extracted reads from a single chromsome (as is with chromosome 21 in the JRC_seeker example), you must still treat this as a run that is processing as specific region.
-
-#### Asset files
 
 ##### Mappability Files
 
