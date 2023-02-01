@@ -196,6 +196,7 @@ Download test data from [here](http://compbio.mit.edu/ChromHMM/) and uncompress.
 * ```reference_genome``` directory - includes .fa sequence for chromosome 12, already indexed by BISCUIT.
 * ```chromosomes.txt``` - specifies on which chromosomes to run JRC_seeker (in this case, only chr12).
 * ```test_config.json``` - contains the parameters and directory paths for the JRC_seeker Snakemake pipeline.
+* ```expected_output.zip``` - contains the expected output of JRC_seeker on this data for debugging purposes.
 
 To run the example, edit ```test_config.json``` with absolute paths. Specifically, adjust:
 
@@ -212,32 +213,15 @@ To run the example, edit ```test_config.json``` with absolute paths. Specificall
 * ```PARAMETERS``` - Make sure to adapt ```binokulars_cores``` to whatever number of threads are available in your machine.
 
 
-	
-	
-
-
-
-
-In the ```/sample_data``` folder you can find some sample files. Be sure to edit the configuration file ```/sample_data/test_config.json``` with the correct paths. Later in this tutorial, you can find a detailed explantion of the contents of this sample data folder.
-
-To start the pipeline, move to the jrc_seeker git-cloned repository (Snakemake requires execution in the same directory as ```Snakefile```) and run the following code:
+To run the pipeline on the example, activate the jrc_seeker conda environment and run Snakemake as follows:
 
 ```
-cd <jrc_seeker_dir> # Replace jrc_seeker_dir with the right route
 conda activate jrc_seeker
-snakemake --cores 1 --configfile sample_data/test_config.json
+snakemake -s <path_to_JRC_seeker>/Snakefile --cores 1 --configfile <path_to_sample_data>/test_config.json
 ```
 
-On your screen, you will notice the steps of the pipeline running one-by-one. You can find the output of this test run in ```/sample_data/output``` and can compare your output to the expected output in the ```/sample_data/expected_output``` directory.
+This pipeline should deliver the same results as stored in ```expected_output.zip``` from the ```sample_data``` and in the absence of errors.
 
-**Note**
-You will notice that there is a warning in the ```label_states``` step stating: "ERROR: UNMETHYLATED STATE NOT CLASSIFIED CORRECTLY. RUN ON MORE DATA". The sample BAM file used does not contain enough data for ChromHMM to label all four states (methylated, unmethylated, intermediately methylated, no data). With this small dataset, the unmethylated state is not found. You can also see this below, as pictured in the ```/sample_data/expected_output/chromhmm/output_files/webpage_4.html``` file, where there is no unmethylated state in the emissions matrix of the ChromHMM output:
-
-![image](https://user-images.githubusercontent.com/52743495/177798760-6eabb423-584f-4513-833d-17bd7b237157.png)
-
-For example, in this image you can see that State 1 is intermediately methylated and State 2 is methylated, but there is no apparent unmethylated state.
-
-Keep an eye on these warnings when running the pipeline and check the emissions matrix of the ChromHMM output to ensure that all states are deconvoluted.
 
 ## Process Overview
 A number of steps are used to complete this analysis.
