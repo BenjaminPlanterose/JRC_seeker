@@ -190,7 +190,7 @@ git clone https://github.com/b-kolar/jrc_seeker.git
 
 # Test run
 
-Download test data from [here](http://compbio.mit.edu/ChromHMM/) and uncompress. This data is not included in the Github repository since its size exceed the 100 MB limit. This includes:
+The test data consists of pooled whole blood WGBS data from old and young men from the following [study](https://onlinelibrary.wiley.com/doi/full/10.1111/acel.13242). Download test data from [HERE!](http://compbio.mit.edu/ChromHMM/) and uncompress. This data is not included in the Github repository since its size exceeds the 100 MB limit. This includes:
 
 * ```sample_data.bam``` - Alignment of WGBS reads from a pooled whole blood experiment. Only reads at the beginning of chr12 have been included (for the sake of timely debugging). This bam file has been sorted and indexed (.csi file).
 * ```reference_genome``` directory - includes .fa sequence for chromosome 12, already indexed by BISCUIT.
@@ -246,31 +246,18 @@ Please make sure that you have succesfully installed all dependencies and run th
 
 ### 1. Prepare input files
 
-#### Reference Genome
-
-The reference genome you use must be indexed using the BISCUIT ```index``` command. To download and index a reference genome, you can run the following command (for hg19):
-
-```
-wget https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/latest/hg19.fa.gz
-gunzip hg19.fa.gz
-biscuit index hg19.fa
-```
-
-Be aware that indexing a reference genome can take time, but only needs to be done once for each reference.
-
-
-
 #### Reference Genome & BAM files
 
-Starting from fastq files, it will be necessary to perform sequence alignment. We used BISCUIT aligner as described [here](https://huishenlab.github.io/biscuit/docs/alignment). 
-Briefly, we first make an index of the reference genome and then align as:
+Starting from fastq files, it will be necessary to perform sequence alignment. We used the BISCUIT aligner as described [here](https://huishenlab.github.io/biscuit/docs/alignment). 
+Briefly, we make an index of the reference genome and align as:
 ```
-biscuit index hg19.fa
+biscuit index my_reference.fa
 biscuit align /path/to/my_reference.fa read1.fq.gz read2.fq.gz | \
     samblaster | samtools sort --write-index -o my_output.bam -O BAM -
 ```
 
-The output bam must be sorted and indexed.
+**IMPORTANT**: The output bam must be sorted and indexed. The command above does this already.
+
 
 #### Chromosomes file
 
@@ -342,89 +329,22 @@ As for the example, edit the configuration file```test_config.json``` with absol
 
 ### 3. Run JRC_seeker
 
-Go into the JRC_seeker directory by:
-```
-cd <Path to JRC_seeker>
-```
-
-Make sure to activate the conda environment by: 
-```
-conda activate jrc_seeker
-```
 
 To make sure there are no problems with your configuration file, do a dry run of the snakemake pipeline:
 
 ```
-snakemake -n --configfile [path to config file]
+conda activate jrc_seeker
+snakemake -n -s <path_to_JRC_seeker>/Snakefile --configfile <path_to_sample_data>/test_config.json
 ```
 
 To run the JRC_Seeker pipeline, simply run the command below, where the number of cores and the path to your edited configuration file is specified.
 ```
-snakemake --cores [amount of cores] --configfile [path to config file]
+conda activate jrc_seeker
+snakemake -s <path_to_JRC_seeker>/Snakefile --cores [number of cores] --configfile <path_to_sample_data>/test_config.json
 ```
 
-*Note:* It is recommended to run with 1 core and specify in the ```config.json``` file the number of cores to run the binokulars step with. If the number of snakemake cores is above 1, the number of cores the final binokulars step uses will be the product of the snakemake cores and the value of the ```binokulars_cores``` field in the ```config.json``` file.
+*Note:* We recommended to run with ```--cores 1``` and specify ```binokulars_cores``` in the ```config.json``` file (the most intensive step). If the number of snakemake cores is above 1, the number of cores the final binokulars step uses will be the product of the snakemake cores and the value of the ```binokulars_cores``` field in the ```config.json``` file.
 
-## A note on time 
-
-The final step of the snakemake pipeline is the actual binokulars run. From a 98 GB BAM file of pooled blood samples of 12 individuals and a 3.1 GB reference genome (entire hg19 reference genome), ~400,000 regions are found to be intermediately methylated regions after BinPolish. It takes approximately 2 seconds for binokulars to process each region. As a result, for 4 cores we expect a binokulars run to take ~55 hours. Using 20 cores, this takes ~11 hours. 
-
-The binokulars step is the bottleneck of this pipeline, but it is also the most parallelizable. The remainder of the pipeline takes under 10 hours for the above mentioned dataset. We recommend using ~20 cores to run the entire pipeline within a day.
-
-## Overview of sample data
-
-In the ```/sample_data``` folder you can find some sample files to test if JRC Seeker is running properly on your machine. Below you can find an explanation of where these files come from and how we created them, just in case you were interested:
-
-**sample_data.bam - Sample BAM file**
-
-This BAM file is of data from chromosome 20 of the pooled blood data from old and young men from the following study: https://www.ebi.ac.uk/ena/browser/view/PRJEB28044?show=reads.
-
-```
-samtools view -b pooled_blood_hg38.bam chr20 > chr_20.bam
-```
-
-To reduce the file size, The first million aligned reads were selected using the following command:
-
-```
-samtools view -h chr_20.bam \
-    | head -n 1000000 \
-    | samtools view -b -o sample_data.bam
-```
-
-**sample_data.bam.csi - BAM index**
-
-The BAM file was indexed using the following command:
-
-```
-samtools index -c sample_data.bam
-```
-
-**chromosomes.txt - chromosomes list**
-
-A list of chromosmes, as outlined earlier. As this comprised of only data from chromosome 20, the chromosomes.txt file is simply one line:
-
-```
-chr20
-```
-
-**test_config.json - sample config file**
-
-The sample config file contains the settings for this run. As we are only looking at chromosome 20, the region is set to ```"chr20"```.
-
-**Reference genome**
-
-In the ```/reference_genome``` directory, you can find ```chr20.fa```, a FASTA file of the reference genome of hg38 for chromosomome 20, which was downloaded [from this Genome Reference Consortium source](https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/) using the following command: 
-
-```
-wget https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/chr20.fa.gz
-gunzip chr20.fa.gz
-```
-
-The FASTA file was indexed by BISCUIT using the following command, which generated the additional files:
-
-```
-biscuit index chr20.fa
-```
 
 
 ## Sources
