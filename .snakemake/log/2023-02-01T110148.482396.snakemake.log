@@ -1,7 +1,0 @@
-Config file /home/ben/Git/JRC_seeker/sample_data/test_config.json is extended by additional config specified via the command line.
-Building DAG of jobs...
-MissingInputException in rule meth_info in file /home/ben/Git/JRC_seeker/Snakefile, line 39:
-Missing input files for rule meth_info:
-    output: /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/biscuit_output/meth_info.bed
-    affected files:
-        /media/ben/DATA/Ben/13_JRC/test_JRC_seeker/tmp
