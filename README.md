@@ -336,7 +336,7 @@ conda activate jrc_seeker
 snakemake -n -s <path_to_JRC_seeker>/Snakefile --configfile <path_to_sample_data>/test_config.json
 ```
 
-To run the JRC_Seeker pipeline, simply run the command below, where the number of cores and the path to your edited configuration file is specified.
+To run the JRC_seeker pipeline, simply run the command below, where the number of cores and the path to your edited configuration file is specified.
 ```
 conda activate jrc_seeker
 snakemake -s <path_to_JRC_seeker>/Snakefile --cores [number of cores] --configfile <path_to_sample_data>/test_config.json
