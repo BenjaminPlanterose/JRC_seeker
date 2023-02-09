@@ -190,7 +190,7 @@ git clone https://github.com/b-kolar/jrc_seeker.git
 
 # Test run
 
-The test data consists of pooled whole blood WGBS data from old and young men from the following [study](https://onlinelibrary.wiley.com/doi/full/10.1111/acel.13242). Download test data from [Zenodo](http://compbio.mit.edu/ChromHMM/) and uncompress. This data is not included in the Github repository since its size exceeds the 100 MB limit. This includes:
+The test data consists of pooled whole blood WGBS data from old and young men from the study of [Laurentino et al](https://onlinelibrary.wiley.com/doi/full/10.1111/acel.13242). Download test data from [Zenodo](http://compbio.mit.edu/ChromHMM/) and uncompress. This data is not included in the Github repository since its size exceeds the 100 MB limit. This includes:
 
 * ```sample_data.bam``` - Alignment of WGBS reads from a pooled whole blood experiment. Only reads at the beginning of chr12 have been included (for the sake of timely debugging). This bam file has been sorted and indexed (.csi file).
 * ```reference_genome``` directory - includes .fa sequence for chromosome 12, already indexed by BISCUIT.
@@ -204,15 +204,15 @@ To run the example, edit ```test_config.json``` with absolute paths. Specificall
 	* ```output_folder``` - where you want the results to be stored. This directory must exist already before running JRC_seeker.
 	* ```path_to_jrc_seeker``` - path to git cloned jrc_seeker directory.
 * PROGRAMMES
-	* ```chromhmm``` - path to the ChromHMM.jar script (as part of the ChromHMM software).
+	* ```chromhmm``` - path to the ChromHMM.jar (as part of the ChromHMM software).
 * FILES
 	* ```path_to_config_file``` - path to the test_config.json file from ```sample_data```.
-	* ```path_to_reference_genome``` - path to the chr12.fa file from ```sample_data```.
-	* ```path_to_bam``` - path to the sample_data.bam from ```sample_data```.
-	* ```chromosomes_file``` - path to the chromosomes.txt from ```sample_data```.
+	* ```path_to_reference_genome``` - path to chr12.fa from ```sample_data```.
+	* ```path_to_bam``` - path to sample_data.bam from ```sample_data```.
+	* ```chromosomes_file``` - path to chromosomes.txt from ```sample_data```.
 	* ```path_to_chrom_length_file``` - path to chromosome lengths for your organism and assembly of choice. See ```/ChromHMM/CHROMSIZES/``` for examples (as part of the ChromHMM software).
 	* ```path_to_mappability_file``` - BED files for low mappability exclusion. We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/mappability_files/```.
-	* ```path_to_blacklist``` - - BED files for regions with anomalous coverage. We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/blacklist_regions/```.
+	* ```path_to_blacklist``` - BED files for regions with anomalous coverage. We provide examples for humans (hg19, hg38) at ```JRC_seeker/assets/blacklist_regions/```.
 * PARAMETERS - Make sure to adapt ```binokulars_cores``` to whatever number of threads are available in your machine. All other parameters must remain as default for this test.
 
 
@@ -235,14 +235,14 @@ The pipeline pre-selects for intermediately-methylated regions (IMRs) and runs a
 3. **Genome segmentation** - A hidden Markov model (HMM) representation of the data is obtained with 4 states (no data, unmethylated, methylated, intermediately methylated) via ChromHMM.
 4. **Genome segmentation polishing** - A custom R-script is employed to remove small intermediately-methylated regions (IMRs) and regions collocating with low-mappability or blacklisted regions.
 5. **Pile-up parsing** - The whole methylation data is processed to count number of methylated/unmethylated Cs per read. This is done with BISCUIT and bash commands.
-5. **JRC statistical test (Binokulars)** - The permutation test implemented in R gives rise to permutation p-values. When $\text{p-value} < 1/N_\text{iter}$, a parametric approximation is employed.
+5. **JRC statistical test (Binokulars)** - Our custom permutation test, implemented in R, computes permutation p-values. When $\text{p-value} < 1/N_\text{iter}$, a parametric approximation is employed.
 
 For more information on Binokulars (Binomial likelihood function-based bootstrap hypothesis test for co-methylation within reads), visit [here](https://github.com/BenjaminPlanterose/Binokulars).
 
 
 ## How to run on your own data?
 
-Please make sure that you have succesfully installed all dependencies and run the example on the ```test_data```.
+Please make sure that you have succesfully installed all dependencies and ran the example on the ```test_data```.
 
 ### 1. Prepare input files
 
@@ -294,15 +294,15 @@ As for the example, edit the configuration file```test_config.json``` with absol
 	* ```output_folder``` - where you want the results to be stored. This directory must exist already before running JRC_seeker.
 	* ```path_to_jrc_seeker``` - path to git cloned jrc_seeker directory.
 * PROGRAMMES
-	* ```chromhmm``` - path to the ChromHMM.jar script (as part of the ChromHMM software).
+	* ```chromhmm``` - path to the ChromHMM.jar (as part of the ChromHMM software).
 * FILES
 	* ```path_to_config_file``` - path to the test_config.json file.
 	* ```path_to_reference_genome``` - path to the reference genome (.fa).
 	* ```path_to_bam``` - path to the alignment file (.bam).
-	* ```chromosomes_file``` - path to the chromosomes.txt.
+	* ```chromosomes_file``` - path to the chromosomes.txt file.
 	* ```path_to_chrom_length_file``` - path to chromosome lengths. See ```/ChromHMM/CHROMSIZES/``` for examples (as part of the ChromHMM software).
 	* ```path_to_mappability_file``` - BED files for low mappability exclusion. See ```JRC_seeker/assets/mappability_files/```.
-	* ```path_to_blacklist``` - - BED files for regions with anomalous coverage. See ```JRC_seeker/assets/blacklist_regions/```.
+	* ```path_to_blacklist``` - BED files for regions with anomalous coverage. See ```JRC_seeker/assets/blacklist_regions/```.
 * PARAMETERS
 	* ```sample_name```: name of your sample (don't use spaces or the following characters: "/" "," "." "\").
 	* Binarization and binning.
@@ -349,10 +349,13 @@ snakemake -s <path_to_JRC_seeker>/Snakefile --cores [number of cores] --configfi
 
 ## Sources
 
-ChromHMM: automating chromatin-state discovery and characterization, Nature methods, 2012, Jason Ernst & Manolis Kellis
 
-Faust, G.G. and Hall, I.M., “SAMBLASTER: fast duplicate marking and structural variant read extraction,” Bioinformatics Sept. 2014; 30(17): 2503-2505.
+Ernst J., Kellis M. (**2012**). ChromHMM: automating chromatin-state discovery and characterization. *Nat Methods*. 9(3):215-6. [doi: 10.1038/nmeth.1906](https://www.nature.com/articles/nmeth.1906). 
 
-Amemiya, H.M., Kundaje, A. & Boyle, A.P. The ENCODE Blacklist: Identification of Problematic Regions of the Genome. Sci Rep 9, 9354 (2019). https://doi.org/10.1038/s41598-019-45839-z
+Faust G.G., Hall I.M. (**2014**). SAMBLASTER: fast duplicate marking and structural variant read extraction. *Bioinformatics*. 30(17):2503-5. [doi: 10.1093/bioinformatics/btu314](https://academic.oup.com/bioinformatics/article/30/17/2503/2748175).
 
-Karimzadeh M, Ernst C, Kundaje A, Hoffman MM. 2018. Umap and Bismap: quantifying genome and methylome mappability. doi: https://doi.org/10.1093/nar/gky677 Nucleic Acids Research, Volume 46, Issue 20, 16 November 2018, Page e120.
+Karimzadeh M., Ernst C., Kundaje A., Hoffman M.M. (**2018**). Umap and Bismap: quantifying genome and methylome mappability. *Nucleic Acids Res*. 46(20):e120. [doi: 10.1093/nar/gky677](https://academic.oup.com/nar/article/46/20/e120/5086676).
+
+Laurentino S. *et al* (**2020**). A germ cell-specific ageing pattern in otherwise healthy men. Aging Cell. 2020 Oct;19(10):e13242. [doi: 10.1111/acel.13242](https://onlinelibrary.wiley.com/doi/full/10.1111/acel.13242).
+
+
