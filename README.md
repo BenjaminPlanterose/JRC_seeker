@@ -274,7 +274,7 @@ rm temp.txt
 In JRC_seeker, we remove potentially artifactual regions to avoid false positive JRCs.
 
 A list of regions that are uniquely mappable by at least one 100-mer can be found under ```/assets/mappability_files``` as part of the JRC_seeker software (only for *Homo sapiens*). 
-These were downloaded from [here](https://bismap.hoffmanlab.org/).
+These were downloaded from [Hoffman's lab website](https://bismap.hoffmanlab.org/).
 
 A list of "blacklisted" regions with anomalous coverage can be found under ```/assets/blacklist_regions```. For hg19, the blacklist file was created by combining regions from the following repositories:
 
@@ -284,7 +284,6 @@ A list of "blacklisted" regions with anomalous coverage can be found under ```/a
 
 The hg38 version is simply the liftover of the hg19 file, obtained with [UCSC LiftOver](https://genome.ucsc.edu/cgi-bin/hgLiftOver).
 
-Further details on the LiftOver settings and the blacklist regions files are listed in the ```/assets/blacklist_regions/README.md```.
 
 ### 2. Edit the configuration file
 
@@ -347,7 +346,7 @@ snakemake -s <path_to_JRC_seeker>/Snakefile --cores [number of cores] --configfi
 
 
 
-## Sources
+## References
 
 
 Ernst J., Kellis M. (**2012**). ChromHMM: automating chromatin-state discovery and characterization. *Nat Methods*. 9(3):215-6. [doi: 10.1038/nmeth.1906](https://www.nature.com/articles/nmeth.1906). 
