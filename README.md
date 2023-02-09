@@ -14,7 +14,7 @@
 Do not attempt to run without at least 50 GB of RAM.
 ```
 
-Test data available at [Zenodo](https://zenodo.org/record/7625657#.Y-UOORzMJu0).
+**IMPORTANT**: Test data available at [Zenodo](https://zenodo.org/record/7625657#.Y-UOORzMJu0).
 
 
 ## Dependencies
