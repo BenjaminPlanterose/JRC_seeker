@@ -355,6 +355,6 @@ Faust G.G., Hall I.M. (**2014**). SAMBLASTER: fast duplicate marking and structu
 
 Karimzadeh M., Ernst C., Kundaje A., Hoffman M.M. (**2018**). Umap and Bismap: quantifying genome and methylome mappability. *Nucleic Acids Res*. 46(20):e120. [doi: 10.1093/nar/gky677](https://academic.oup.com/nar/article/46/20/e120/5086676).
 
-Laurentino S. *et al* (**2020**). A germ cell-specific ageing pattern in otherwise healthy men. Aging Cell. 2020 Oct;19(10):e13242. [doi: 10.1111/acel.13242](https://onlinelibrary.wiley.com/doi/full/10.1111/acel.13242).
+Laurentino S. *et al* (**2020**). A germ cell-specific ageing pattern in otherwise healthy men. *Aging Cell*. 19(10):e13242. [doi: 10.1111/acel.13242](https://onlinelibrary.wiley.com/doi/full/10.1111/acel.13242).
 
 
