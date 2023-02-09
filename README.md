@@ -13,7 +13,8 @@
 
 Do not attempt to run without at least 50 GB of RAM.
 
-Test data available at Zenodo ($URL$)
+Test data available at [Zenodo](https://zenodo.org/record/7625657#.Y-UOORzMJu0).
+
 ```
 
 ## Dependencies
@@ -190,7 +191,7 @@ git clone https://github.com/b-kolar/jrc_seeker.git
 
 # Test run
 
-The test data consists of pooled whole blood WGBS data from old and young men from the study of [Laurentino et al](https://onlinelibrary.wiley.com/doi/full/10.1111/acel.13242). Download test data from [Zenodo](http://compbio.mit.edu/ChromHMM/) and uncompress. This data is not included in the Github repository since its size exceeds the 100 MB limit. This includes:
+The test data consists of pooled whole blood WGBS data from old and young men from the study of [Laurentino et al](https://onlinelibrary.wiley.com/doi/full/10.1111/acel.13242). Download test data from [Zenodo](https://zenodo.org/record/7625657#.Y-UOORzMJu0) and uncompress. This data is not included in the Github repository since its size exceeds the 100 MB limit. This includes:
 
 * ```sample_data.bam``` - Alignment of WGBS reads from a pooled whole blood experiment. Only reads at the beginning of chr12 have been included (for the sake of timely debugging). This bam file has been sorted and indexed (.csi file).
 * ```reference_genome``` directory - includes .fa sequence for chromosome 12, already indexed by BISCUIT.
