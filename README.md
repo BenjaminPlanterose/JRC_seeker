@@ -12,10 +12,10 @@
 - Organism: Homo sapiens (3.1 GB reference genome). For a 98 GB BAM file, it takes approximately 1 day (using 20 cores). 
 
 Do not attempt to run without at least 50 GB of RAM.
+```
 
 Test data available at [Zenodo](https://zenodo.org/record/7625657#.Y-UOORzMJu0).
 
-```
 
 ## Dependencies
 
