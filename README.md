@@ -1,5 +1,7 @@
 # JRC_seeker
-#### Benjamin Planterose Jiménez<sup>1</sup>, Brontë Kolar<sup>1</sup>, Manfred Kayser<sup>1</sup>, Athina Vidaki<sup>1</sup>
+#### Benjamin Planterose Jiménez, Brontë Kolar, Manfred Kayser, Athina Vidaki
+Department of Genetic Identification, Erasmus MC University Medical Center Rotterdam, Rotterdam, the Netherlands.
+
 
 <img src="https://user-images.githubusercontent.com/52743495/173834089-526c540a-df4b-452f-964e-26104bf6f261.png" width="350" />
 
