@@ -1,11 +1,11 @@
 # JRC_seeker
+## A Snakemake pipeline for the genome-wide discovery of jointly regulated CpGs (JRCs) in pooled whole genome bisulfite sequencing (WGBS) data. 
 #### Benjamin Planterose Jiménez, Brontë Kolar, Manfred Kayser, Athina Vidaki
 Department of Genetic Identification, Erasmus MC University Medical Center Rotterdam, Rotterdam, the Netherlands.
 
 
 <img src="https://user-images.githubusercontent.com/52743495/173834089-526c540a-df4b-452f-964e-26104bf6f261.png" width="350" />
 
-**JRC_seeker** is a Snakemake pipeline for the genome-wide discovery of jointly regulated CpGs (JRCs) in pooled whole genome bisulfite sequencing (WGBS) data. 
 
 #### Tested on:
 ```
