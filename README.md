@@ -19,6 +19,8 @@ variation via the discovery of jointly regulated CpGs in pooled sequencing data"
 Do not attempt to run without at least 50 GB of RAM.
 ```
 
+For issues/questions regarding JRC_seeker, either [report an issue](https://github.com/BenjaminPlanterose/JRC_seeker/issues) or simply contact me via b.planterosejimenez at erasmusmc.nl
+
 **IMPORTANT**: Test data available at [Zenodo](https://zenodo.org/record/7625657#.Y-UOORzMJu0).
 
 
